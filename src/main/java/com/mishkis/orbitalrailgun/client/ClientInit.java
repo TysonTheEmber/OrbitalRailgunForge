@@ -6,10 +6,10 @@ import com.mishkis.orbitalrailgun.client.render.railgun.PostChainManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod.EventBusSubscriber(modid = ForgeOrbitalRailgunMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class ClientInit {
@@ -19,18 +19,13 @@ public final class ClientInit {
     private ClientInit() {
     }
 
-    public static void register() {
-        final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modBus.addListener(ClientInit::onRegisterReloadListeners);
-    }
-
+    @SubscribeEvent
     public static void onClientSetup(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            // Client events are registered via static subscribers.
-        });
+        event.enqueueWork(() -> MinecraftForge.EVENT_BUS.register(new ClientEvents()));
     }
 
-    private static void onRegisterReloadListeners(final RegisterClientReloadListenersEvent event) {
+    @SubscribeEvent
+    public static void onRegisterReloadListeners(final RegisterClientReloadListenersEvent event) {
         event.registerReloadListener(WORLD_POST);
         event.registerReloadListener(GUI_POST);
     }
