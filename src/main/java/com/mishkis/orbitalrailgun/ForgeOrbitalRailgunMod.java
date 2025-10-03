@@ -3,14 +3,11 @@ package com.mishkis.orbitalrailgun;
 import com.mishkis.orbitalrailgun.net.NetworkHandler;
 import com.mishkis.orbitalrailgun.registry.ModItems;
 import com.mishkis.orbitalrailgun.util.OrbitalRailgunStrikeManager;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,18 +21,10 @@ public final class ForgeOrbitalRailgunMod {
         final IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         ModItems.REGISTER.register(modBus);
 
-        modBus.addListener(this::onClientSetup);
-
         MinecraftForge.EVENT_BUS.register(this);
 
         NetworkHandler.init();
         OrbitalRailgunStrikeManager.initialize();
-
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> com.mishkis.orbitalrailgun.client.ClientInit::register);
-    }
-
-    private void onClientSetup(final FMLClientSetupEvent event) {
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> com.mishkis.orbitalrailgun.client.ClientInit.onClientSetup(event));
     }
 
     @SubscribeEvent

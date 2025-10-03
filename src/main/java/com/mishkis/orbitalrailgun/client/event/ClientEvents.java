@@ -5,26 +5,22 @@ import com.mishkis.orbitalrailgun.item.OrbitalRailgunItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-
-@Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class ClientEvents {
 
     @SubscribeEvent
-    public static void onClientTick(final TickEvent.ClientTickEvent event) {
+    public void onClientTick(final TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             RailgunClientState.get().clientTick(Minecraft.getInstance());
         }
     }
 
     @SubscribeEvent
-    public static void onComputeFov(final ViewportEvent.ComputeFov event) {
+    public void onComputeFov(final ViewportEvent.ComputeFov event) {
         final RailgunClientState state = RailgunClientState.get();
         if (state.isCharging() || state.isAwaitingAck()) {
             event.setFOV(Minecraft.getInstance().options.fov().get());
@@ -32,7 +28,7 @@ public final class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onRenderLevelStage(final RenderLevelStageEvent event) {
+    public void onRenderLevelStage(final RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_LEVEL) {
             return;
         }
@@ -43,7 +39,7 @@ public final class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onRenderGui(final RenderGuiEvent.Post event) {
+    public void onRenderGui(final RenderGuiEvent.Post event) {
         final RailgunClientState state = RailgunClientState.get();
         if (!state.shouldRenderGuiEffect()) {
             return;
